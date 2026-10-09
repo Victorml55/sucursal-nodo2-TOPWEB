@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Administrativo - Sucursal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Panel de Control de Sucursal</h1>
+      <a href="/logout" class="text-red-500 hover:underline text-sm">Cerrar Sesión</a>
+    </div>
+    <p class="mb-6 text-gray-600">Bienvenido, <strong><%= user.email %></strong></p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <a href="/accounts/new" class="block p-6 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-center">
+        <h3 class="font-bold text-lg text-blue-800">Alta de Nuevo Cliente</h3>
+        <p class="text-sm text-blue-600 mt-1">Registrar cuenta con saldo inicial ($1,000)</p>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

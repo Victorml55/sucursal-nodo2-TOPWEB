@@ -1,0 +1,21 @@
+<form action="/transaction" method="POST" class="space-y-4">
+  <div>
+    <label class="block text-sm font-medium">Tipo de Operación</label>
+    <select name="tipo" class="w-full border p-2 rounded">
+      <option value="deposito">Depósito</option>
+      <option value="retiro">Retiro</option>
+    </select>
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium">Número de Cuenta</label>
+    <input type="text" name="numero_cuenta" placeholder="1000000001" required class="w-full border p-2 rounded">
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium">Monto ($)</label>
+    <input type="number" name="monto" step="0.01" min="1" required class="w-full border p-2 rounded">
+  </div>
+
+  <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded">Procesar Operación</button>
+</form>
