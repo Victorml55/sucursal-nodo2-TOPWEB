@@ -11,7 +11,7 @@ const centralClient = axios.create({
 // 1. Obtener información de tu cajero/nodo y el efectivo oficial
 exports.getNodeInfo = async () => {
   const response = await centralClient.get('/api/node/me');
-  return response.data; // Retorna info del cajero y 'efectivo_nodo'
+  return response.data;
 };
 
 // 2. Consultar información de una cuenta
@@ -26,7 +26,7 @@ exports.withdraw = async (numeroCuenta, monto) => {
     numero_cuenta: numeroCuenta,
     monto: Number(monto)
   });
-  return response.data; // Devuelve confirmación y el nuevo 'efectivo_nodo'
+  return response.data;
 };
 
 // 4. Realizar un Depósito
@@ -35,14 +35,14 @@ exports.deposit = async (numeroCuenta, monto) => {
     numero_cuenta: numeroCuenta,
     monto: Number(monto)
   });
-  return response.data; // Devuelve confirmación y el nuevo 'efectivo_nodo'
+  return response.data;
 };
 
-// 5. Crear una nueva cuenta (Agregada)
+// 5. Crear una nueva cuenta (Alineado con el contrato de la Central)
 exports.createAccount = async ({ titular, saldo }) => {
   const response = await centralClient.post('/api/accounts', {
-    titular,
-    saldo: Number(saldo)
+    titular: String(titular).trim(),
+    saldo_inicial: Number(saldo)
   });
   return response.data;
 };
