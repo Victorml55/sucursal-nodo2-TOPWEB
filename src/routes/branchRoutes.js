@@ -6,10 +6,12 @@ const authMiddleware = require('../middlewares/authMiddleware');
 router.use(authMiddleware);
 
 router.get('/dashboard', branchController.renderDashboard);
-router.get('/accounts/new', branchController.renderNewClient);
 
-// Asegúrate de que la ruta POST coincida con el action de tu formulario EJS
+// Acepta la ruta /new-client que usa tu dashboard
+router.get('/new-client', branchController.renderNewClient);
+router.get('/accounts/new', branchController.renderNewClient); // Aliases de respaldo
+
+// Procesar el envío del formulario
 router.post('/create-account', branchController.createAccount); 
-// O si prefieres mantener /accounts/new, cámbialo en el action="" del <form> en new-client.ejs
 
 module.exports = router;

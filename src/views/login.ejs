@@ -2,26 +2,157 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Login Ejecutivo - Sucursal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso Ejecutivo - Sucursal</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background-color: #0b101a;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-  <div class="bg-white p-8 rounded-lg shadow-md w-96">
-    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Acceso Ejecutivo</h2>
-    <% if (error) { %>
-      <div class="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm"><%= error %></div>
-    <% } %>
-    <form action="/login" method="POST">
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2">Correo Electrónico</label>
-        <input type="email" name="email" required class="w-full border rounded p-2 text-sm focus:outline-none focus:border-blue-500">
+<body class="text-slate-200 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Header Superior Minimalista -->
+  <header class="border-b border-slate-800/80 bg-[#0d1424] px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+          <i data-lucide="building-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <p class="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Sistema Bancario Distribuido</p>
+          <h1 class="text-sm font-bold text-white tracking-tight">
+            Sucursal Administrativa <span class="text-xs font-normal text-slate-400">(Nodo 2)</span>
+          </h1>
+        </div>
       </div>
-      <div class="mb-6">
-        <label class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label>
-        <input type="password" name="password" required class="w-full border rounded p-2 text-sm focus:outline-none focus:border-blue-500">
+      
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        Terminal Segura
       </div>
-      <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 transition">Ingresar</button>
-    </form>
-  </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal: Card de Login -->
+  <main class="flex-1 flex items-center justify-center p-4 sm:p-6">
+    <div class="w-full max-w-md">
+      
+      <!-- Card de Acceso -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+        <!-- Accent Glow superior -->
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-emerald-500"></div>
+
+        <!-- Encabezado del Formulario -->
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-600/10 border border-blue-500/20 text-blue-400 mb-4 shadow-inner">
+            <i data-lucide="shield-check" class="w-7 h-7"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-white tracking-tight">Acceso Ejecutivo</h2>
+          <p class="text-xs text-slate-400 mt-1.5">Ingresa tus credenciales autorizadas para operar la sucursal.</p>
+        </div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+          <!-- Alerta de Error -->
+          <div class="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-3">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+            <div class="flex-1">
+              <p class="font-semibold text-rose-200">Error de Autenticación</p>
+              <p class="mt-0.5 opacity-90"><%= error %></p>
+            </div>
+          </div>
+        <% } %>
+
+        <form action="/login" method="POST" id="loginForm" class="space-y-5">
+          
+          <!-- Campo Correo Electrónico -->
+          <div>
+            <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Correo Electrónico
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+              </div>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required 
+                placeholder="ejecutivo1@sucursal.com" 
+                class="w-full pl-10 pr-4 py-2.5 bg-[#0b101a] border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium"
+              />
+            </div>
+          </div>
+
+          <!-- Campo Contraseña -->
+          <div>
+            <label for="password" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Contraseña
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                <i data-lucide="lock" class="w-4 h-4"></i>
+              </div>
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                required 
+                placeholder="••••••••" 
+                class="w-full pl-10 pr-4 py-2.5 bg-[#0b101a] border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium"
+              />
+            </div>
+          </div>
+
+          <!-- Botón Ingresar -->
+          <button 
+            type="submit" 
+            id="submitBtn"
+            class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-blue-600/25 cursor-pointer flex items-center justify-center gap-2 mt-2"
+          >
+            <i data-lucide="log-in" class="w-4 h-4"></i>
+            <span>Ingresar al Panel</span>
+          </button>
+        </form>
+
+        <div class="mt-6 pt-5 border-t border-slate-800/80 text-center text-[11px] text-slate-500">
+          <span>Sesión protegida por encriptación local y API Key</span>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/60 bg-[#0d1424] py-4 text-center text-xs text-slate-500">
+    <p>Sistema Bancario Distribuido &bull; Terminal de Autenticación Nodo 2</p>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    const form = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', () => {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      submitBtn.innerHTML = `
+        <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Autenticando...</span>
+      `;
+    });
+  </script>
 </body>
 </html>
