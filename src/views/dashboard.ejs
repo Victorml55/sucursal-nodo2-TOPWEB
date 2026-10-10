@@ -2,23 +2,173 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Panel Administrativo - Sucursal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Sucursal Administrativa</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background-color: #0b101a;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 p-8">
-  <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">Panel de Control de Sucursal</h1>
-      <a href="/logout" class="text-red-500 hover:underline text-sm">Cerrar Sesión</a>
+<body class="text-slate-200 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Header del Panel -->
+  <header class="border-b border-slate-800/80 bg-[#0d1424] px-6 py-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <p class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Panel Administrativo</p>
+        <h1 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+          Sucursal Administrativa <span class="text-xs font-medium text-slate-400">(Nodo 2)</span>
+        </h1>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Usuario activo -->
+        <div class="text-right hidden sm:block">
+          <p class="text-xs font-semibold text-slate-200"><%= typeof user !== 'undefined' ? (user.email || user) : 'ejecutivo1@sucursal.com' %></p>
+          <p class="text-[10px] text-emerald-400 font-medium">Ejecutivo de Cuenta</p>
+        </div>
+
+        <!-- Badge de Estado -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          En servicio
+        </div>
+
+        <!-- Cerrar Sesión -->
+        <a href="/logout" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 rounded-lg text-xs font-semibold text-rose-400 transition-colors inline-flex items-center gap-1.5">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          Salir
+        </a>
+      </div>
     </div>
-    <p class="mb-6 text-gray-600">Bienvenido, <strong><%= user.email %></strong></p>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-1">
     
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="/accounts/new" class="block p-6 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-center">
-        <h3 class="font-bold text-lg text-blue-800">Alta de Nuevo Cliente</h3>
-        <p class="text-sm text-blue-600 mt-1">Registrar cuenta con saldo inicial ($1,000)</p>
-      </a>
+    <!-- Fila de Métricas y Estado de la Sucursal -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      
+      <!-- Metric 1: Efectivo -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-5 relative overflow-hidden">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium text-slate-400">Efectivo en Sucursal</p>
+            <p class="text-2xl font-bold text-white mt-1">$<%= typeof nodeInfo !== 'undefined' && nodeInfo.efectivo_disponible ? nodeInfo.efectivo_disponible : '10,000.00' %></p>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <i data-lucide="wallet" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">Sincronizado con Banco Central</p>
+      </div>
+
+      <!-- Metric 2: Conexión -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-5">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium text-slate-400">Conexión con Central</p>
+            <p class="text-xl font-bold text-emerald-400 mt-1">Conectado</p>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+            <i data-lucide="server" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">API Key: <span class="font-mono text-slate-400">atm_test_123456</span></p>
+      </div>
+
+      <!-- Metric 3: Tipo de Operación -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-5">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium text-slate-400">Tipo de Nodo</p>
+            <p class="text-xl font-bold text-white mt-1">Sucursal #02</p>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+            <i data-lucide="building-2" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">Apertura de Cuentas activa</p>
+      </div>
+
+      <!-- Metric 4: Base de Datos -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-5">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium text-slate-400">Base de Datos Local</p>
+            <p class="text-xl font-bold text-amber-400 mt-1">Supabase OK</p>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+            <i data-lucide="database" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">Persistencia de operaciones</p>
+      </div>
+
     </div>
-  </div>
+
+    <!-- Módulos Principales de Acción -->
+    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Operaciones de Sucursal</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      
+      <!-- Opción 1: Alta de Nuevo Cliente -->
+      <a href="/new-client" class="group bg-[#131b2e] hover:bg-[#182234] border border-slate-800 hover:border-blue-500/50 rounded-xl p-6 transition-all duration-200 block shadow-lg">
+        <div class="w-12 h-12 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <i data-lucide="user-plus" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-base font-bold text-white group-hover:text-blue-400 transition-colors">Apertura de Cuenta</h3>
+        <p class="text-xs text-slate-400 mt-1 leading-relaxed">Registra un nuevo cliente con asignación de número de cuenta y saldo inicial oficial.</p>
+        <div class="mt-4 inline-flex items-center gap-1 text-xs font-bold text-blue-400">
+          <span>Ir al formulario</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+        </div>
+      </a>
+
+      <!-- Opción 2: Consultar Cuentas -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-6 shadow-lg">
+        <div class="w-12 h-12 rounded-xl bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4">
+          <i data-lucide="search" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-base font-bold text-white">Consultar Cuentas</h3>
+        <p class="text-xs text-slate-400 mt-1 leading-relaxed">Verifica el saldo y estado actual de cualquier cuentahabiente en el Banco Central.</p>
+        <div class="mt-4 flex gap-2">
+          <input type="text" placeholder="Número de cuenta..." class="w-full px-3 py-1.5 bg-[#0b101a] border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+          <button class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold">Buscar</button>
+        </div>
+      </div>
+
+      <!-- Opción 3: Estado de la Red -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-6 shadow-lg">
+        <div class="w-12 h-12 rounded-xl bg-purple-600/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mb-4">
+          <i data-lucide="activity" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-base font-bold text-white">Auditoría Local</h3>
+        <p class="text-xs text-slate-400 mt-1 leading-relaxed">Bitácora inmutable de transacciones procesadas por este nodo administrativo.</p>
+        <div class="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-slate-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          Sincronizado con Supabase
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/60 bg-[#0d1424] py-4 text-center text-xs text-slate-500">
+    <p>Sistema Bancario Distribuido &bull; Nodo 2 Sucursal Administrativa</p>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
 </html>
