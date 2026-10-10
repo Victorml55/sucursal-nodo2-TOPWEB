@@ -37,3 +37,12 @@ exports.deposit = async (numeroCuenta, monto) => {
   });
   return response.data; // Devuelve confirmación y el nuevo 'efectivo_nodo'
 };
+
+// 5. Crear una nueva cuenta (Agregada)
+exports.createAccount = async ({ titular, saldo }) => {
+  const response = await centralClient.post('/api/accounts', {
+    titular,
+    saldo: Number(saldo)
+  });
+  return response.data;
+};
