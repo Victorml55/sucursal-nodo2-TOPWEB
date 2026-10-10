@@ -4,6 +4,9 @@ const centralService = require('../services/centralService');
  * Muestra la vista de Inicio de Sesión
  */
 exports.getLogin = (req, res) => {
+  if (req.session && req.session.user) {
+    return res.redirect('/dashboard');
+  }
   res.render('login', { error: null });
 };
 
@@ -27,11 +30,11 @@ exports.postLogin = (req, res) => {
 };
 
 /**
- * Muestra el Dashboard principal de la Sucursal (Nodo 2) procesando notificaciones
+ * Muestra el Dashboard principal de la Sucursal (Nodo 2)
  */
 exports.getDashboard = async (req, res) => {
   try {
-    const user = req.session?.user || { email: 'ejecutivo1@sucursal.com' };
+    const user = req.session.user;
     const { success, account, titular, error } = req.query;
     
     const nodeInfo = {
@@ -40,7 +43,6 @@ exports.getDashboard = async (req, res) => {
       nodo: 'Nodo 2'
     };
 
-    // Construcción del objeto de notificación para la UI
     let notification = null;
     if (success === 'true') {
       notification = {
@@ -64,7 +66,7 @@ exports.getDashboard = async (req, res) => {
   } catch (err) {
     console.error('>>> Error al cargar el Dashboard:', err.message);
     res.render('dashboard', { 
-      user: 'ejecutivo1@sucursal.com',
+      user: req.session?.user?.email || 'Ejecutivo',
       nodeInfo: { efectivo_disponible: '16,499.00' },
       notification: null
     });
@@ -104,12 +106,8 @@ exports.createAccount = async (req, res) => {
       saldo_inicial: saldo 
     });
 
-    console.log('>>> Respuesta exitosa del Banco Central:', resultado);
-
-    // Obtener el número de cuenta retornado por la Central
     const numCuenta = resultado.cuenta?.numero_cuenta || resultado.numero_cuenta || '0000000000';
 
-    // Redirección con parámetros de notificación
     return res.redirect(`/dashboard?success=true&account=${encodeURIComponent(numCuenta)}&titular=${encodeURIComponent(titular)}`);
 
   } catch (error) {
@@ -129,8 +127,6 @@ exports.createAccount = async (req, res) => {
 exports.searchAccount = async (req, res) => {
   const { numero_cuenta } = req.query;
 
-  console.log('>>> [GET /search-account] Buscando cuenta:', numero_cuenta);
-
   if (!numero_cuenta) {
     return res.render('account-details', { 
       cuenta: null, 
@@ -145,8 +141,6 @@ exports.searchAccount = async (req, res) => {
     
     const cuenta = data.cuenta || data;
     const transacciones = data.transacciones || data.historial || [];
-
-    console.log('>>> Cuenta encontrada:', cuenta.numero_cuenta || numero_cuenta);
 
     return res.render('account-details', { 
       cuenta, 
@@ -171,8 +165,6 @@ exports.searchAccount = async (req, res) => {
  * Genera y emite la vista de Reportes Administrativos de Operaciones
  */
 exports.getReports = async (req, res) => {
-  console.log('>>> [GET /reports] Generando reporte administrativo...');
-
   try {
     const reportData = await centralService.getReports();
     
@@ -204,6 +196,7 @@ exports.getReports = async (req, res) => {
 exports.logout = (req, res) => {
   if (req.session) {
     req.session.destroy(() => {
+      res.clearCookie('connect.sid'); // Limpia la cookie de sesión del navegador
       res.redirect('/login');
     });
   } else {

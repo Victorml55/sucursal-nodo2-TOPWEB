@@ -2,23 +2,29 @@ const express = require('express');
 const router = express.Router();
 const branchController = require('../controllers/branchController');
 
-// Rutas de Autenticación
+/**
+ * Middleware para verificar si el ejecutivo ha iniciado sesión
+ */
+const requireAuth = (req, res, next) => {
+  if (req.session && req.session.user) {
+    return next();
+  }
+  return res.redirect('/login');
+};
+
+// Rutas Públicas
 router.get('/login', branchController.getLogin);
 router.post('/login', branchController.postLogin);
 router.get('/logout', branchController.logout);
 
-// Rutas de Operación del Dashboard
-router.get('/', branchController.getDashboard);
-router.get('/dashboard', branchController.getDashboard);
+// Rutas Protegidas (Exigen autenticación antes de acceder)
+router.get('/', requireAuth, branchController.getDashboard);
+router.get('/dashboard', requireAuth, branchController.getDashboard);
 
-// Rutas de Alta de Clientes
-router.get('/new-client', branchController.getNewClient);
-router.post('/create-account', branchController.createAccount);
+router.get('/new-client', requireAuth, branchController.getNewClient);
+router.post('/create-account', requireAuth, branchController.createAccount);
 
-// Rutas de Consultas e Historial
-router.get('/search-account', branchController.searchAccount);
-
-// Rutas de Reportes Administrativos
-router.get('/reports', branchController.getReports);
+router.get('/search-account', requireAuth, branchController.searchAccount);
+router.get('/reports', requireAuth, branchController.getReports);
 
 module.exports = router;
