@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const branchController = require('../controllers/branchController');
-const authMiddleware = require('../middlewares/authMiddleware');
 
-router.use(authMiddleware);
+// Rutas de Autenticación
+router.get('/login', branchController.getLogin);
+router.post('/login', branchController.postLogin);
+router.get('/logout', branchController.logout);
 
-router.get('/dashboard', branchController.renderDashboard);
+// Rutas de Operación del Dashboard
+router.get('/', branchController.getDashboard);
+router.get('/dashboard', branchController.getDashboard);
 
-// Acepta la ruta /new-client que usa tu dashboard
-router.get('/new-client', branchController.renderNewClient);
-router.get('/accounts/new', branchController.renderNewClient); // Aliases de respaldo
-
-// Procesar el envío del formulario
-router.post('/create-account', branchController.createAccount); 
+// Rutas de Alta de Clientes
+router.get('/new-client', branchController.getNewClient);
+router.post('/create-account', branchController.createAccount);
 
 module.exports = router;
