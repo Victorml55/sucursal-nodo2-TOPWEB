@@ -27,27 +27,46 @@ exports.postLogin = (req, res) => {
 };
 
 /**
- * Muestra el Dashboard principal de la Sucursal (Nodo 2)
+ * Muestra el Dashboard principal de la Sucursal (Nodo 2) procesando notificaciones
  */
 exports.getDashboard = async (req, res) => {
   try {
     const user = req.session?.user || { email: 'ejecutivo1@sucursal.com' };
+    const { success, account, titular, error } = req.query;
     
     const nodeInfo = {
-      efectivo_disponible: '5,000.00',
+      efectivo_disponible: '16,499.00',
       nombre: 'Sucursal Centro',
       nodo: 'Nodo 2'
     };
 
+    // Construcción del objeto de notificación para la UI
+    let notification = null;
+    if (success === 'true') {
+      notification = {
+        type: 'success',
+        title: '¡Cuenta creada exitosamente en el Banco Central!',
+        account: account || 'N/A',
+        titular: titular || 'Cliente'
+      };
+    } else if (error) {
+      notification = {
+        type: 'error',
+        message: error
+      };
+    }
+
     res.render('dashboard', { 
       user: user.email || user,
-      nodeInfo 
+      nodeInfo,
+      notification 
     });
-  } catch (error) {
-    console.error('>>> Error al cargar el Dashboard:', error.message);
+  } catch (err) {
+    console.error('>>> Error al cargar el Dashboard:', err.message);
     res.render('dashboard', { 
       user: 'ejecutivo1@sucursal.com',
-      nodeInfo: { efectivo_disponible: '5,000.00' } 
+      nodeInfo: { efectivo_disponible: '16,499.00' },
+      notification: null
     });
   }
 };
@@ -87,7 +106,11 @@ exports.createAccount = async (req, res) => {
 
     console.log('>>> Respuesta exitosa del Banco Central:', resultado);
 
-    return res.redirect('/dashboard');
+    // Obtener el número de cuenta retornado por la Central
+    const numCuenta = resultado.cuenta?.numero_cuenta || resultado.numero_cuenta || '0000000000';
+
+    // Redirección con parámetros de notificación
+    return res.redirect(`/dashboard?success=true&account=${encodeURIComponent(numCuenta)}&titular=${encodeURIComponent(titular)}`);
 
   } catch (error) {
     console.error('>>> Error detectado al procesar en Central:', error.response?.data || error.message);
@@ -140,6 +163,37 @@ exports.searchAccount = async (req, res) => {
       transacciones: [], 
       error: 'No se encontró la cuenta especificada o la Central no respondió.',
       busqueda: numero_cuenta
+    });
+  }
+};
+
+/**
+ * Genera y emite la vista de Reportes Administrativos de Operaciones
+ */
+exports.getReports = async (req, res) => {
+  console.log('>>> [GET /reports] Generando reporte administrativo...');
+
+  try {
+    const reportData = await centralService.getReports();
+    
+    return res.render('reports', { 
+      report: reportData,
+      fechaEmision: new Date().toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short' }),
+      error: null 
+    });
+  } catch (error) {
+    console.error('>>> Error al generar el reporte:', error.message);
+    return res.render('reports', { 
+      report: {
+        total_cuentas: 0,
+        total_depositos: 0,
+        total_retiros: 0,
+        balance_neto: 0,
+        efectivo_caja: 16499.00,
+        operaciones: []
+      },
+      fechaEmision: new Date().toLocaleString('es-MX'),
+      error: 'Ocurrió un inconveniente al consolidar la información operativa.' 
     });
   }
 };

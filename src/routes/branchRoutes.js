@@ -18,4 +18,7 @@ router.post('/create-account', branchController.createAccount);
 // Rutas de Consultas e Historial
 router.get('/search-account', branchController.searchAccount);
 
+// Rutas de Reportes Administrativos
+router.get('/reports', branchController.getReports);
+
 module.exports = router;
