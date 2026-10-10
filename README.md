@@ -116,12 +116,17 @@ Para ejecutar el proyecto localmente o desplegarlo en Render o Vercel, configura
 
 ```env
 PORT=3000
+<<<<<<< HEAD
 SESSION_SECRET=super_secreto_bancario_nodo2
 CENTRAL_API_URL=https://banco-central-panel.onrender.com/api
 CENTRAL_API_KEY=tu_clave_api_central_aqui
+=======
+SESSION_SECRET=
+CENTRAL_API_URL=https://banco-central-api.onrender.com/api
+CENTRAL_API_KEY=
+>>>>>>> 64eb8813927be81158fdf82c1a4958db43d3e091
 ```
 
-> Usa un `SESSION_SECRET` distinto y robusto en producción, y nunca subas tu `.env` al repositorio.
 
 ---
 
