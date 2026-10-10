@@ -4,72 +4,212 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Apertura de Cuenta - Sucursal</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background-color: #0b101a;
+    }
+  </style>
 </head>
-<body class="bg-slate-100 flex items-center justify-center min-h-screen">
+<body class="text-slate-200 antialiased min-h-screen flex flex-col justify-between">
 
-  <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+  <!-- Header del Panel -->
+  <header class="border-b border-slate-800/80 bg-[#0d1424] px-6 py-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <p class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Panel Administrativo</p>
+        <h1 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+          Sucursal Administrativa <span class="text-xs font-medium text-slate-400">(Nodo 2)</span>
+        </h1>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <!-- Badge de Estado -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          En servicio
+        </div>
+
+        <!-- Botón Volver -->
+        <a href="/dashboard" class="px-4 py-2 bg-[#182234] hover:bg-[#202d44] border border-slate-700/60 rounded-lg text-xs font-semibold text-slate-200 transition-colors inline-flex items-center gap-2">
+          <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+          Ver dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-1">
     
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-slate-800">Apertura de Cuenta</h1>
-      <a href="/dashboard" class="text-sm text-blue-600 hover:underline">← Volver</a>
+    <!-- Fila de Métricas Superiores -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      
+      <!-- Card 1 -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-4">
+        <p class="text-xs font-medium text-slate-400">Tipo de Nodo</p>
+        <p class="text-xl font-bold text-white mt-1">Sucursal #02</p>
+        <p class="text-[11px] text-slate-500 mt-1">Habilitado para aperturas</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-4">
+        <p class="text-xs font-medium text-slate-400">Conexión Banco Central</p>
+        <p class="text-xl font-bold text-emerald-400 mt-1">Conectado</p>
+        <p class="text-[11px] text-slate-500 mt-1">API Key validada</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-4">
+        <p class="text-xs font-medium text-slate-400">Operación</p>
+        <p class="text-xl font-bold text-white mt-1">Alta de Cuentas</p>
+        <p class="text-[11px] text-slate-500 mt-1">Sincronización directa</p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-4">
+        <p class="text-xs font-medium text-slate-400">Modo</p>
+        <p class="text-xl font-bold text-amber-400 mt-1">Producción / Render</p>
+        <p class="text-[11px] text-slate-500 mt-1">Base de datos en nube</p>
+      </div>
+
     </div>
 
-    <% if (typeof error !== 'undefined' && error) { %>
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
-        <%= error %>
-      </div>
-    <% } %>
-
-    <form action="/create-account" method="POST" class="space-y-4">
+    <!-- Layout Central de Formulario -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- Nombre del Titular -->
-      <div>
-        <label for="titular" class="block text-sm font-medium text-slate-700 mb-1">
-          Nombre del Titular
-        </label>
-        <input 
-          type="text" 
-          id="titular" 
-          name="titular" 
-          placeholder="Juan Pérez" 
-          required
-          class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-        />
+      <!-- Columna Izquierda: Formulario de Registro (8 cols) -->
+      <div class="lg:col-span-7 bg-[#131b2e] border border-slate-800 rounded-xl p-6 shadow-2xl">
+        <div class="mb-6 border-b border-slate-800 pb-4">
+          <h2 class="text-lg font-bold text-white">Apertura de Cuenta de Cliente</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Ingresa los datos del nuevo cuentahabiente para enviarlos al Banco Central.</p>
+        </div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+          <!-- Alerta de Error Estilo Oscuro -->
+          <div class="mb-6 p-4 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-3">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+            <div>
+              <p class="font-bold">Error en la operación</p>
+              <p class="mt-0.5 text-rose-300/80"><%= error %></p>
+            </div>
+          </div>
+        <% } %>
+
+        <form action="/create-account" method="POST" id="accountForm" class="space-y-5">
+          
+          <!-- Nombre del Titular -->
+          <div>
+            <label for="titular" class="block text-xs font-semibold text-slate-300 mb-2">
+              Nombre Completo del Titular
+            </label>
+            <input 
+              type="text" 
+              id="titular" 
+              name="titular" 
+              required 
+              placeholder="ej. Juan Pérez" 
+              class="w-full px-3.5 py-2.5 bg-[#0b101a] border border-slate-700/80 rounded-lg text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium"
+            />
+          </div>
+
+          <!-- Saldo Inicial -->
+          <div>
+            <label for="saldo" class="block text-xs font-semibold text-slate-300 mb-2">
+              Saldo Inicial ($ MXN)
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500 font-semibold text-sm">$</span>
+              <input 
+                type="number" 
+                id="saldo" 
+                name="saldo" 
+                step="0.01" 
+                min="0" 
+                required 
+                placeholder="1000.00" 
+                class="w-full pl-8 pr-3.5 py-2.5 bg-[#0b101a] border border-slate-700/80 rounded-lg text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium"
+              />
+            </div>
+          </div>
+
+          <!-- Nota informativa -->
+          <div class="p-3.5 rounded-lg bg-[#0b101a]/60 border border-slate-800 text-xs text-slate-400 flex items-start gap-2.5">
+            <i data-lucide="info" class="w-4 h-4 text-blue-400 shrink-0 mt-0.5"></i>
+            <p>El Banco Central generará automáticamente un número de cuenta único de 10 dígitos y registrará el saldo inicial como el primer depósito oficial.</p>
+          </div>
+
+          <!-- Botón de Acción -->
+          <button 
+            type="submit" 
+            id="submitBtn"
+            class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-blue-600/20 cursor-pointer flex items-center justify-center gap-2"
+          >
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>Registrar Cuenta</span>
+          </button>
+        </form>
       </div>
 
-      <!-- Saldo Inicial -->
-      <div>
-        <label for="saldo" class="block text-sm font-medium text-slate-700 mb-1">
-          Saldo Inicial ($)
-        </label>
-        <input 
-          type="number" 
-          id="saldo" 
-          name="saldo" 
-          placeholder="1000" 
-          min="0"
-          step="0.01"
-          required
-          class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-        />
+      <!-- Columna Derecha: Información del Estado del Nodo (5 cols) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- Tarjeta de Información de Red -->
+        <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-6">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Estado de la Red</h3>
+          
+          <div class="space-y-3 text-xs">
+            <div class="flex justify-between py-2 border-b border-slate-800">
+              <span class="text-slate-400">Banco Central</span>
+              <span class="font-semibold text-white">Nodo 1 (Central)</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-slate-800">
+              <span class="text-slate-400">API Key activa</span>
+              <span class="font-mono text-emerald-400">atm_test_123456</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-slate-800">
+              <span class="text-slate-400">Protocolo</span>
+              <span class="font-semibold text-white">REST / JSON</span>
+            </div>
+            <div class="flex justify-between py-2">
+              <span class="text-slate-400">Base de datos local</span>
+              <span class="font-semibold text-emerald-400">Supabase Conectada</span>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Nota informativa sobre el número de cuenta -->
-      <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg text-xs text-slate-500">
-        ℹ️ El número de cuenta será generado automáticamente por el Banco Central al procesar la apertura.
-      </div>
+    </div>
+  </main>
 
-      <!-- Botón de envío -->
-      <button 
-        type="submit" 
-        class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-3 px-4 rounded-lg transition duration-200"
-      >
-        Registrar Cuenta
-      </button>
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/60 bg-[#0d1424] py-4 text-center text-xs text-slate-500">
+    <p>Sistema Bancario Distribuido &bull; Nodo 2 Administrativo</p>
+  </footer>
 
-    </form>
-  </div>
+  <script>
+    lucide.createIcons();
 
+    const form = document.getElementById('accountForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', () => {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      submitBtn.innerHTML = `
+        <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Procesando en Central...</span>
+      `;
+    });
+  </script>
 </body>
 </html>
