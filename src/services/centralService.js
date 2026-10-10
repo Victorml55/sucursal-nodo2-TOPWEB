@@ -9,7 +9,7 @@ const centralClient = axios.create({
 });
 
 
-const MOCK_MODE = true;
+const MOCK_MODE = false;
 
 // 1. Obtener información del nodo
 exports.getNodeInfo = async () => {
