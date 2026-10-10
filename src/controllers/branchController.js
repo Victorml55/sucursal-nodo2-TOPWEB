@@ -1,59 +1,120 @@
 const centralService = require('../services/centralService');
-const supabase = require('../config/supabase');
 
-// 1. Mostrar Dashboard (Línea 8 de las rutas)
-exports.renderDashboard = async (req, res) => {
+/**
+ * Muestra la vista de Inicio de Sesión
+ */
+exports.getLogin = (req, res) => {
+  res.render('login', { error: null });
+};
+
+/**
+ * Procesa la autenticación del ejecutivo
+ */
+exports.postLogin = (req, res) => {
+  const { email, password } = req.body;
+
+  console.log('>>> [POST /login] Intentando autenticar ejecutivo:', email);
+
+  if (!email || !password) {
+    return res.render('login', { error: 'Por favor ingresa correo y contraseña.' });
+  }
+
+  // Guarda las credenciales en la sesión
+  if (req.session) {
+    req.session.user = { email };
+  }
+
+  return res.redirect('/dashboard');
+};
+
+/**
+ * Muestra el Dashboard principal de la Sucursal (Nodo 2)
+ */
+exports.getDashboard = async (req, res) => {
   try {
-
-    const user = req.user || req.session?.user || { email: 'ejecutivo@sucursal.com' };
+    const user = req.session?.user || { email: 'ejecutivo1@sucursal.com' };
+    
+    const nodeInfo = {
+      efectivo_disponible: '5,000.00',
+      nombre: 'Sucursal Centro',
+      nodo: 'Nodo 2'
+    };
 
     res.render('dashboard', { 
-      user: user, 
-      error: null 
+      user: user.email || user,
+      nodeInfo 
     });
   } catch (error) {
-    console.error('Error al cargar dashboard:', error);
+    console.error('>>> Error al cargar el Dashboard:', error.message);
     res.render('dashboard', { 
-      user: req.user || { email: 'ejecutivo@sucursal.com' }, 
-      error: 'Error al cargar el panel.' 
+      user: 'ejecutivo1@sucursal.com',
+      nodeInfo: { efectivo_disponible: '5,000.00' } 
     });
   }
 };
 
-// 2. Mostrar formulario de nuevo cliente
-exports.renderNewClient = (req, res) => {
-  res.render('new-client', { error: null, success: null });
+/**
+ * Muestra el formulario de Apertura de Cuenta
+ */
+exports.getNewClient = (req, res) => {
+  res.render('new-client', { error: null });
 };
 
-// 3. Crear nueva cuenta
+/**
+ * Procesa la creación de la cuenta enviando la solicitud al Banco Central
+ */
 exports.createAccount = async (req, res) => {
-  const { titular, saldo } = req.body;
+  console.log('>>> [POST /create-account] Datos recibidos del formulario:', req.body);
 
   try {
-    const centralData = await centralService.createAccount({ titular, saldo });
-    const numeroCuentaGenerado = centralData.numero_cuenta || centralData.account_number;
+    const { titular, saldo_inicial } = req.body;
 
-    await supabase
-      .from('branch_operations')
-      .insert([
-        {
-          operation_type: 'apertura',
-          account_number: String(numeroCuentaGenerado),
-          amount: Number(saldo),
-          status: 'SUCCESS'
-        }
-      ]);
+    // Validación de campos vacíos
+    if (!titular || saldo_inicial === undefined || saldo_inicial === '') {
+      console.log('>>> Error: Campos incompletos en el formulario');
+      return res.render('new-client', { error: 'Por favor completa todos los campos requeridos.' });
+    }
 
-    res.render('new-client', { 
-      success: `Cuenta creada exitosamente. Número asignado: ${numeroCuentaGenerado}`,
-      error: null
+    // Conversión a tipo numérico
+    const saldo = Number(saldo_inicial);
+    if (isNaN(saldo) || saldo < 0) {
+      console.log('>>> Error: Saldo inicial inválido');
+      return res.render('new-client', { error: 'El saldo inicial debe ser un número válido mayor o igual a 0.' });
+    }
+
+    // Petición a la API Central
+    console.log('>>> Enviando solicitud de registro al Banco Central...');
+    const resultado = await centralService.createAccount({ 
+      titular, 
+      saldo_inicial: saldo 
     });
+
+    console.log('>>> Respuesta exitosa del Banco Central:', resultado);
+
+    // Redirección al Dashboard al finalizar con éxito
+    return res.redirect('/dashboard');
 
   } catch (error) {
-    console.error('Error al crear cuenta:', error.response?.data || error.message);
-    res.render('new-client', { 
-      error: 'No se pudo crear la cuenta en la Central.',
-      success: null
+    console.error('>>> Error detectado al procesar en Central:', error.response?.data || error.message);
+    
+    // Captura el mensaje retornado por el backend de la Central
+    const mensajeError = error.response?.data?.error 
+      || error.response?.data?.mensaje 
+      || 'No se pudo crear la cuenta en la Central.';
+    
+    return res.render('new-client', { error: mensajeError });
+  }
+};
+
+/**
+ * Cierra la sesión activa
+ */
+exports.logout = (req, res) => {
+  if (req.session) {
+    req.session.destroy(() => {
+      res.redirect('/login');
     });
+  } else {
+    res.redirect('/login');
   }
 };
