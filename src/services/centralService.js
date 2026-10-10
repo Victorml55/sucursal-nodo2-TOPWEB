@@ -79,3 +79,32 @@ exports.createAccount = async (data) => {
   });
   return response.data;
 };
+
+exports.getAccountDetails = async (numero_cuenta) => {
+  if (MOCK_MODE) {
+    console.log(`>>> [MOCK ACTIVADO] Consultando cuenta ${numero_cuenta}...`);
+    return {
+      cuenta: {
+        numero_cuenta,
+        titular: 'Victor ML',
+        saldo: 9999.00,
+        estado: 'activa',
+        created_at: new Date().toISOString()
+      },
+      transacciones: [
+        { id: 6, tipo: 'deposito', monto: 9999.00, node_id: 2, created_at: new Date().toISOString() },
+        { id: 2, tipo: 'retiro', monto: 500.00, node_id: 1, created_at: new Date(Date.now() - 86400000).toISOString() }
+      ]
+    };
+  }
+
+  // Petición real a la API Central
+  const response = await axios.get(`${CENTRAL_URL}/api/accounts/${numero_cuenta}`, {
+    headers: {
+      'x-api-key': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  return response.data;
+};

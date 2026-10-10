@@ -19,7 +19,6 @@ exports.postLogin = (req, res) => {
     return res.render('login', { error: 'Por favor ingresa correo y contraseña.' });
   }
 
-  // Guarda las credenciales en la sesión
   if (req.session) {
     req.session.user = { email };
   }
@@ -69,20 +68,17 @@ exports.createAccount = async (req, res) => {
   try {
     const { titular, saldo_inicial } = req.body;
 
-    // Validación de campos vacíos
     if (!titular || saldo_inicial === undefined || saldo_inicial === '') {
       console.log('>>> Error: Campos incompletos en el formulario');
       return res.render('new-client', { error: 'Por favor completa todos los campos requeridos.' });
     }
 
-    // Conversión a tipo numérico
     const saldo = Number(saldo_inicial);
     if (isNaN(saldo) || saldo < 0) {
       console.log('>>> Error: Saldo inicial inválido');
       return res.render('new-client', { error: 'El saldo inicial debe ser un número válido mayor o igual a 0.' });
     }
 
-    // Petición a la API Central
     console.log('>>> Enviando solicitud de registro al Banco Central...');
     const resultado = await centralService.createAccount({ 
       titular, 
@@ -91,18 +87,60 @@ exports.createAccount = async (req, res) => {
 
     console.log('>>> Respuesta exitosa del Banco Central:', resultado);
 
-    // Redirección al Dashboard al finalizar con éxito
     return res.redirect('/dashboard');
 
   } catch (error) {
     console.error('>>> Error detectado al procesar en Central:', error.response?.data || error.message);
     
-    // Captura el mensaje retornado por el backend de la Central
     const mensajeError = error.response?.data?.error 
       || error.response?.data?.mensaje 
       || 'No se pudo crear la cuenta en la Central.';
     
     return res.render('new-client', { error: mensajeError });
+  }
+};
+
+/**
+ * Consulta información de cuenta e historial de transacciones
+ */
+exports.searchAccount = async (req, res) => {
+  const { numero_cuenta } = req.query;
+
+  console.log('>>> [GET /search-account] Buscando cuenta:', numero_cuenta);
+
+  if (!numero_cuenta) {
+    return res.render('account-details', { 
+      cuenta: null, 
+      transacciones: [], 
+      error: 'Ingresa un número de cuenta válido para realizar la búsqueda.',
+      busqueda: ''
+    });
+  }
+
+  try {
+    const data = await centralService.getAccountDetails(numero_cuenta.trim());
+    
+    const cuenta = data.cuenta || data;
+    const transacciones = data.transacciones || data.historial || [];
+
+    console.log('>>> Cuenta encontrada:', cuenta.numero_cuenta || numero_cuenta);
+
+    return res.render('account-details', { 
+      cuenta, 
+      transacciones, 
+      error: null,
+      busqueda: numero_cuenta
+    });
+
+  } catch (error) {
+    console.error('>>> Error al consultar cuenta en Central:', error.response?.data || error.message);
+    
+    return res.render('account-details', { 
+      cuenta: null, 
+      transacciones: [], 
+      error: 'No se encontró la cuenta especificada o la Central no respondió.',
+      busqueda: numero_cuenta
+    });
   }
 };
 

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Cuenta - Sucursal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background-color: #0e1117;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(20, 30, 45, 0.6) 0px, transparent 75%),
+        radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+      background-size: 100% 100%, 20px 20px;
+    }
+  </style>
+</head>
+<body class="text-stone-300 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Header Superior -->
+  <header class="border-b border-stone-800/80 bg-[#121620]/80 backdrop-blur-md px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-stone-800 border border-stone-700/60 flex items-center justify-center text-stone-200">
+          <i data-lucide="building-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <p class="text-[10px] font-bold tracking-wider text-stone-400 uppercase">Sistema Bancario Distribuido</p>
+          <h1 class="text-sm font-bold text-stone-100 tracking-tight">
+            Sucursal Administrativa <span class="text-xs font-normal text-stone-400">(Nodo 2)</span>
+          </h1>
+        </div>
+      </div>
+
+      <a href="/dashboard" class="px-3.5 py-1.5 rounded-lg bg-stone-800/80 hover:bg-stone-700 border border-stone-700/60 text-stone-300 text-xs font-medium transition-all flex items-center gap-1.5">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        <span>Volver al Dashboard</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 w-full flex-1">
+    
+    <!-- Barra de Búsqueda de Cuenta -->
+    <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-6 shadow-xl shadow-black/40 mb-8">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">Consulta Global de Cuentas</h2>
+      <form action="/search-account" method="GET" class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-500">
+            <i data-lucide="search" class="w-4 h-4"></i>
+          </div>
+          <input 
+            type="text" 
+            name="numero_cuenta" 
+            value="<%= typeof busqueda !== 'undefined' ? busqueda : '' %>"
+            placeholder="Ingresa los 10 dígitos de la cuenta (ej. 1000000086)..." 
+            required
+            class="w-full pl-10 pr-4 py-2.5 bg-[#0d1017] border border-stone-800 rounded-xl text-stone-100 placeholder-stone-600 text-sm focus:outline-none focus:border-stone-600 focus:ring-1 focus:ring-stone-600 font-medium"
+          />
+        </div>
+        <button type="submit" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-700 text-emerald-100 text-xs font-bold uppercase tracking-wider rounded-xl transition-all border border-emerald-600/30 flex items-center justify-center gap-2 shrink-0">
+          <i data-lucide="file-search" class="w-4 h-4"></i>
+          <span>Consultar</span>
+        </button>
+      </form>
+    </div>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <!-- Alerta de Error -->
+      <div class="p-4 rounded-xl bg-rose-950/40 border border-rose-800/50 text-rose-300 text-xs flex items-center gap-3 mb-8">
+        <i data-lucide="alert-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+        <span><%= error %></span>
+      </div>
+    <% } %>
+
+    <% if (typeof cuenta !== 'undefined' && cuenta) { %>
+      <!-- Tarjeta Detalle de la Cuenta -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        
+        <!-- Datos Titular -->
+        <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-5 shadow-xl shadow-black/40">
+          <p class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider">Titular de la Cuenta</p>
+          <p class="text-lg font-bold text-stone-100 mt-1"><%= cuenta.titular %></p>
+          <p class="text-xs text-stone-500 mt-2 flex items-center gap-1.5">
+            <i data-lucide="credit-card" class="w-3.5 h-3.5 text-stone-400"></i>
+            Cuenta: <span class="font-mono text-stone-300"><%= cuenta.numero_cuenta %></span>
+          </p>
+        </div>
+
+        <!-- Balance Actual -->
+        <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-5 shadow-xl shadow-black/40">
+          <p class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider">Saldo Disponible</p>
+          <p class="text-2xl font-bold text-emerald-400 mt-1">$<%= Number(cuenta.saldo).toLocaleString('es-MX', { minimumFractionDigits: 2 }) %></p>
+          <p class="text-[11px] text-stone-500 mt-2">Sincronizado con Banco Central</p>
+        </div>
+
+        <!-- Estado de la Cuenta -->
+        <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-5 shadow-xl shadow-black/40 flex flex-col justify-between">
+          <div>
+            <p class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider">Estatus en Red</p>
+            <div class="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <%= (cuenta.estado || 'activa').toUpperCase() %>
+            </div>
+          </div>
+          <p class="text-[10px] text-stone-500 mt-3">Registro de Alta: <%= new Date(cuenta.created_at || Date.now()).toLocaleDateString() %></p>
+        </div>
+
+      </div>
+
+      <!-- Tabla de Transacciones -->
+      <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-6 shadow-xl shadow-black/40">
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-stone-800">
+          <h3 class="text-sm font-bold text-stone-100 tracking-tight flex items-center gap-2">
+            <i data-lucide="history" class="w-4 h-4 text-emerald-400"></i>
+            <span>Historial de Movimientos</span>
+          </h3>
+          <span class="text-xs text-stone-500"><%= transacciones.length %> transacción(es) registrada(s)</span>
+        </div>
+
+        <% if (transacciones.length > 0) { %>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-stone-400 uppercase border-b border-stone-800/80 text-[10px] tracking-wider">
+                  <th class="pb-3 font-semibold">ID / Tipo</th>
+                  <th class="pb-3 font-semibold">Monto</th>
+                  <th class="pb-3 font-semibold">Nodo Origen</th>
+                  <th class="pb-3 font-semibold text-right">Fecha y Hora</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-stone-800/50 text-stone-300">
+                <% transacciones.forEach(tx => { %>
+                  <tr class="hover:bg-stone-900/40 transition-colors">
+                    <td class="py-3 font-medium">
+                      <span class="text-stone-500 font-mono">#<%= tx.id %></span> &bull; 
+                      <span class="<%= tx.tipo === 'deposito' ? 'text-emerald-400' : 'text-rose-400' %> uppercase font-bold text-[11px] ml-1">
+                        <%= tx.tipo %>
+                      </span>
+                    </td>
+                    <td class="py-3 font-bold text-stone-100">
+                      <%= tx.tipo === 'deposito' ? '+' : '-' %>$<%= Number(tx.monto).toLocaleString('es-MX', { minimumFractionDigits: 2 }) %>
+                    </td>
+                    <td class="py-3 text-stone-400">
+                      Nodo #<%= tx.node_id || tx.nodo_id || 2 %>
+                    </td>
+                    <td class="py-3 text-stone-500 text-right font-mono text-[11px]">
+                      <%= new Date(tx.created_at).toLocaleString() %>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="text-center py-8 text-stone-500 text-xs">
+            No hay movimientos registrados para esta cuenta.
+          </div>
+        <% } %>
+
+      </div>
+    <% } %>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-stone-800/60 bg-[#121620]/60 py-3 text-center text-xs text-stone-500">
+    <p>Sistema Bancario Distribuido &bull; Nodo 2 Sucursal</p>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

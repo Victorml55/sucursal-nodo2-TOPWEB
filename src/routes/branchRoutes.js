@@ -15,4 +15,7 @@ router.get('/dashboard', branchController.getDashboard);
 router.get('/new-client', branchController.getNewClient);
 router.post('/create-account', branchController.createAccount);
 
+// Rutas de Consultas e Historial
+router.get('/search-account', branchController.searchAccount);
+
 module.exports = router;
