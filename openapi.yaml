@@ -1,51 +1,137 @@
-Sistema Bancario Distribuido — Nodo 2: Sucursal AdministrativaEste repositorio contiene la implementación del Nodo 2 (Sucursal Administrativa) dentro de un Sistema Bancario Distribuido. Este módulo permite a los ejecutivos de sucursal gestionar la apertura de cuentas de clientes, la consulta de estados de cuenta e historial transaccional, y la consolidación de cortes operativos y reportes de auditoría en tiempo real en comunicación sincrónica con el Nodo 1 (Banco Central).📌 Enlaces de Despliegue en ProducciónComponenteEntorno de HostingEnlace / URL PúblicaEstadoNodo 1 — Banco Central APICoolify / Renderhttps://banco-central-api.onrender.comACTIVONodo 2 — Sucursal AdministrativaRender / Vercelhttps://sucursal-nodo2-nyl2.onrender.comACTIVO📐 Diagrama de Arquitectura de la Red Bancariagraph TD
-    subgraph Cliente ["💻 Cliente / Ejecutivo de Cuenta"]
-        UI["Interfaz Web (EJS + Tailwind CSS)"]
-    end
-
-    subgraph Nodo2 ["🏢 Nodo 2: Sucursal Administrativa (Node.js / Express)"]
-        Router["Express Router & Controllers"]
-        CentralService["Central API Service (Axios Client)"]
-        SessionStore["Session Manager"]
-    end
-
-    subgraph Nodo1 ["🏛️ Nodo 1: Banco Central (Servidor Principal)"]
-        CentralAPI["API REST Central"]
-        CentralDB[(Base de Datos Central - PostgreSQL / Supabase)]
-    end
-
-    UI -->|HTTPS / Requests| Router
-    Router -->|Invocación interna| CentralService
-    CentralService -->|Peticiones REST con API Key| CentralAPI
-    CentralAPI -->|Consultas SQL / Transacciones| CentralDB
-🛠️ Módulos del Sistema DistribuidoAutenticación y Control de Sesión (/login, /logout):Acceso restringido para ejecutivos de cuenta autorizados en el Nodo 2.Apertura de Cuentas (/new-client, /create-account):Registro distribuido de clientes y asignación automática de número de cuenta de 10 dígitos mediante el Banco Central.Sistema de notificaciones (toasts) en el Dashboard.Consulta de Cuentas y Movimientos (/search-account):Búsqueda en tiempo real de saldos y la bitácora transaccional (depósitos y retiros) sincronizada.Reportes y Corte de Caja (/reports):Métricas de liquidez de la sucursal, consolidación de depósito/retiro acumulado e interfaz adaptada para impresión física/PDF.📂 Estructura de Proyecto (Nodo 2)sucursal-nodo2/
-├── src/
-│   ├── config/
-│   │   └── supabase.js       # Configuración de base de datos local (opcional/respaldo)
-│   ├── controllers/
-│   │   └── branchController.js # Lógica de negocio de la sucursal
-│   ├── routes/
-│   │   └── branchRoutes.js    # Definición de rutas Express
-│   ├── services/
-│   │   └── centralService.js  # Cliente de integración Axios con Nodo 1 (Banco Central)
-│   └── app.js                 # Punto de entrada de la aplicación Node.js
-├── views/                     # Vistas EJS (Interfaz Matte Titanium)
-│   ├── login.ejs
-│   ├── dashboard.ejs
-│   ├── new-client.ejs
-│   ├── account-details.ejs
-│   └── reports.ejs
-├── public/                    # Recurso estáticos (CSS/JS)
-├── .env.example               # Plantilla de variables de entorno
-├── openapi.yaml               # Especificación OpenAPI 3.0 de la API
-├── package.json
-└── README.md
-⚙️ Variables de Entorno (.env)Para ejecutar el proyecto localmente o desplegarlo en Render/Vercel/Coolify, configura las siguientes variables:PORT=3000
-SESSION_SECRET=super_secreto_bancario_nodo2
-CENTRAL_API_URL=https://banco-central-api.onrender.com/api
-CENTRAL_API_KEY=tu_clave_api_central_aqui
-🚀 Instalación y Ejecución LocalClonar el repositorio:git clone https://github.com/tu-usuario/sucursal-nodo2.git
-cd sucursal-nodo2
-Instalar dependencias:npm install
-Iniciar en modo desarrollo:npm run dev
-Abrir en el navegador: http://localhost:3000
+openapi: 3.0.3
+info:
+  title: Sistema Bancario Distribuido - Nodo 2 (Sucursal Administrativa)
+  description: |
+    API web de la Sucursal Administrativa. Gestiona apertura de cuentas,
+    consulta de saldos y movimientos, y reportes de corte de caja,
+    comunicándose de forma sincrónica con el Nodo 1 (Banco Central).
+  version: 1.0.0
+servers:
+  - url: https://sucursal-nodo2-nyl2.onrender.com
+    description: Producción
+  - url: http://localhost:3000
+    description: Desarrollo local
+tags:
+  - name: Autenticación
+  - name: Cuentas
+  - name: Reportes
+paths:
+  /login:
+    get:
+      tags: [Autenticación]
+      summary: Muestra el formulario de inicio de sesión
+      responses:
+        "200":
+          description: Vista HTML de login
+          content:
+            text/html:
+              schema:
+                type: string
+    post:
+      tags: [Autenticación]
+      summary: Inicia sesión como ejecutivo de cuenta
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        "302":
+          description: Redirige al dashboard si las credenciales son válidas
+        "401":
+          description: Credenciales inválidas
+  /logout:
+    get:
+      tags: [Autenticación]
+      summary: Cierra la sesión actual
+      responses:
+        "302":
+          description: Redirige a /login
+  /new-client:
+    get:
+      tags: [Cuentas]
+      summary: Muestra el formulario de apertura de cuenta
+      security:
+        - sessionAuth: []
+      responses:
+        "200":
+          description: Vista HTML del formulario
+          content:
+            text/html:
+              schema:
+                type: string
+  /create-account:
+    post:
+      tags: [Cuentas]
+      summary: Registra un cliente y solicita al Banco Central un número de cuenta de 10 dígitos
+      security:
+        - sessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                saldo_inicial:
+                  type: number
+                  minimum: 0
+      responses:
+        "302":
+          description: Redirige al dashboard con notificación de éxito
+        "400":
+          description: Datos inválidos
+        "502":
+          description: Error de comunicación con el Banco Central
+  /search-account:
+    get:
+      tags: [Cuentas]
+      summary: Consulta saldo e historial de movimientos de una cuenta
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: account
+          in: query
+          required: true
+          description: Número de cuenta de 10 dígitos
+          schema:
+            type: string
+            pattern: "^[0-9]{10}$"
+      responses:
+        "200":
+          description: Vista HTML con detalles de la cuenta
+          content:
+            text/html:
+              schema:
+                type: string
+        "404":
+          description: Cuenta no encontrada
+  /reports:
+    get:
+      tags: [Reportes]
+      summary: Corte de caja y métricas de liquidez de la sucursal
+      security:
+        - sessionAuth: []
+      responses:
+        "200":
+          description: Vista HTML del reporte, adaptada para impresión o PDF
+          content:
+            text/html:
+              schema:
+                type: string
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid
