@@ -4,27 +4,38 @@ const CENTRAL_URL = process.env.CENTRAL_URL || 'https://banco-central-panel.onre
 const API_KEY = process.env.CENTRAL_API_KEY || 'CLAVE_SUCURSAL_NODO_2';
 const MOCK_MODE = false;
 
+// Estado dinámico del efectivo en caja del Nodo 2
+let efectivoCaja = Number(process.env.INITIAL_CASH || 15000.00);
+
 /**
- * Envía la solicitud de apertura de cuenta al Banco Central
+ * Retorna el balance de efectivo actual
+ */
+exports.getEfectivoCaja = () => efectivoCaja;
+
+/**
+ * Envía la solicitud de apertura de cuenta al Banco Central y actualiza el efectivo en caja
  */
 exports.createAccount = async (data) => {
+  const montoInicial = Number(data.saldo_inicial) || 0;
+
   if (MOCK_MODE) {
     console.log('>>> [MOCK ACTIVADO] Simulando creación exitosa en Central...');
+    efectivoCaja += montoInicial;
     return {
       cuenta: {
         numero_cuenta: '100000' + Math.floor(1000 + Math.random() * 9000),
         titular: data.titular,
-        saldo: Number(data.saldo_inicial),
+        saldo: montoInicial,
         estado: 'activa'
       },
       transaccion: {
         id: Math.floor(Math.random() * 100),
         tipo: 'deposito',
-        monto: Number(data.saldo_inicial),
+        monto: montoInicial,
         node_id: 2,
         created_at: new Date().toISOString()
       },
-      efectivo_nodo: 15000
+      efectivo_nodo: efectivoCaja
     };
   }
 
@@ -32,7 +43,7 @@ exports.createAccount = async (data) => {
     `${CENTRAL_URL}/api/accounts`,
     {
       titular: data.titular,
-      saldo_inicial: Number(data.saldo_inicial)
+      saldo_inicial: montoInicial
     },
     {
       headers: {
@@ -41,6 +52,13 @@ exports.createAccount = async (data) => {
       }
     }
   );
+
+  // Sincronizar efectivo con el Banco Central o sumar el depósito al saldo local
+  if (response.data && response.data.efectivo_nodo !== undefined) {
+    efectivoCaja = Number(response.data.efectivo_nodo);
+  } else {
+    efectivoCaja += montoInicial;
+  }
 
   return response.data;
 };
@@ -81,14 +99,13 @@ exports.getAccountDetails = async (numero_cuenta) => {
 exports.getReports = async () => {
   if (MOCK_MODE) {
     return {
-      total_cuentas: 8,
-      total_depositos: 48999.00,
-      total_retiros: 12500.00,
-      balance_neto: 36499.00,
-      efectivo_caja: 16499.00,
+      total_cuentas: 2,
+      total_depositos: 18999.00,
+      total_retiros: 0.00,
+      balance_neto: 18999.00,
+      efectivo_caja: efectivoCaja,
       operaciones: [
-        { id: 6, tipo: 'deposito', cuenta: '1000000086', titular: 'Victor ML', monto: 9999.00, nodo_id: 2, created_at: new Date().toISOString() },
-        { id: 1, tipo: 'deposito', cuenta: '1000000001', titular: 'Juan Pérez', monto: 9000.00, nodo_id: 1, created_at: new Date(Date.now() - 3600000).toISOString() }
+        { id: 6, tipo: 'deposito', cuenta: '1000000086', titular: 'Victor ML', monto: 9999.00, nodo_id: 2, created_at: new Date().toISOString() }
       ]
     };
   }
@@ -100,20 +117,26 @@ exports.getReports = async () => {
         'Content-Type': 'application/json'
       }
     });
-    return response.data;
+
+    if (response.data && (response.data.efectivo_caja !== undefined || response.data.efectivo_nodo !== undefined)) {
+      efectivoCaja = Number(response.data.efectivo_caja ?? response.data.efectivo_nodo);
+    }
+
+    return {
+      ...response.data,
+      efectivo_caja: response.data?.efectivo_caja ?? efectivoCaja
+    };
   } catch (error) {
     console.warn('>>> Endpoint /api/reports en Central no disponible, generando consolidado local de nodo:', error.message);
     
-    // Consolidado por defecto con las operaciones conocidas del nodo
     return {
       total_cuentas: 2,
       total_depositos: 18999.00,
       total_retiros: 0.00,
       balance_neto: 18999.00,
-      efectivo_caja: 16499.00,
+      efectivo_caja: efectivoCaja,
       operaciones: [
-        { id: 6, tipo: 'deposito', cuenta: '1000000086', titular: 'Victor ML', monto: 9999.00, nodo_id: 2, created_at: new Date().toISOString() },
-        { id: 1, tipo: 'deposito', cuenta: '1000000001', titular: 'Juan Pérez', monto: 9000.00, nodo_id: 1, created_at: new Date(Date.now() - 7200000).toISOString() }
+        { id: 6, tipo: 'deposito', cuenta: '1000000086', titular: 'Victor ML', monto: 9999.00, nodo_id: 2, created_at: new Date().toISOString() }
       ]
     };
   }

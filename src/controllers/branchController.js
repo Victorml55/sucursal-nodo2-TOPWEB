@@ -1,5 +1,9 @@
 const centralService = require('../services/centralService');
 
+// Credenciales autorizadas para ejecutivos de la sucursal (pueden ser configuradas vía .env)
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'ejecutivo1@sucursal.com';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Admin2026!';
+
 /**
  * Muestra la vista de Inicio de Sesión
  */
@@ -11,7 +15,7 @@ exports.getLogin = (req, res) => {
 };
 
 /**
- * Procesa la autenticación del ejecutivo
+ * Procesa la autenticación con verificación estricta de credenciales de ejecutivo
  */
 exports.postLogin = (req, res) => {
   const { email, password } = req.body;
@@ -22,23 +26,41 @@ exports.postLogin = (req, res) => {
     return res.render('login', { error: 'Por favor ingresa correo y contraseña.' });
   }
 
+  // Validación de credenciales de ejecutivo autorizado
+  if (
+    email.trim().toLowerCase() !== ADMIN_EMAIL.toLowerCase() ||
+    password !== ADMIN_PASSWORD
+  ) {
+    console.log('>>> Acceso denegado: Credenciales no autorizadas');
+    return res.render('login', { 
+      error: 'Credenciales inválidas. Acceso denegado para personal no autorizado.' 
+    });
+  }
+
   if (req.session) {
-    req.session.user = { email };
+    req.session.user = { email: email.trim().toLowerCase() };
   }
 
   return res.redirect('/dashboard');
 };
 
 /**
- * Muestra el Dashboard principal de la Sucursal (Nodo 2)
+ * Muestra el Dashboard calculando el efectivo dinámicamente
  */
 exports.getDashboard = async (req, res) => {
   try {
     const user = req.session.user;
     const { success, account, titular, error } = req.query;
     
+    // Obtener reporte/datos centrales para calcular el efectivo disponible dinámicamente
+    const reportData = await centralService.getReports();
+    const efectivoCalculado = reportData.efectivo_caja ?? centralService.getEfectivoCaja();
+
     const nodeInfo = {
-      efectivo_disponible: '16,499.00',
+      efectivo_disponible: Number(efectivoCalculado).toLocaleString('es-MX', { 
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2 
+      }),
       nombre: 'Sucursal Centro',
       nodo: 'Nodo 2'
     };
@@ -65,9 +87,12 @@ exports.getDashboard = async (req, res) => {
     });
   } catch (err) {
     console.error('>>> Error al cargar el Dashboard:', err.message);
+    const efectivoFallback = centralService.getEfectivoCaja();
     res.render('dashboard', { 
-      user: req.session?.user?.email || 'Ejecutivo',
-      nodeInfo: { efectivo_disponible: '16,499.00' },
+      user: req.session?.user?.email || 'ejecutivo1@sucursal.com',
+      nodeInfo: { 
+        efectivo_disponible: Number(efectivoFallback).toLocaleString('es-MX', { minimumFractionDigits: 2 }) 
+      },
       notification: null
     });
   }
@@ -181,7 +206,7 @@ exports.getReports = async (req, res) => {
         total_depositos: 0,
         total_retiros: 0,
         balance_neto: 0,
-        efectivo_caja: 16499.00,
+        efectivo_caja: centralService.getEfectivoCaja(),
         operaciones: []
       },
       fechaEmision: new Date().toLocaleString('es-MX'),
@@ -196,7 +221,7 @@ exports.getReports = async (req, res) => {
 exports.logout = (req, res) => {
   if (req.session) {
     req.session.destroy(() => {
-      res.clearCookie('connect.sid'); // Limpia la cookie de sesión del navegador
+      res.clearCookie('connect.sid');
       res.redirect('/login');
     });
   } else {
