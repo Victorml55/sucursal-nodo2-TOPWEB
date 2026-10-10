@@ -12,92 +12,60 @@
   <style>
     body { 
       font-family: 'Plus Jakarta Sans', sans-serif; 
-      background-color: #0b101a;
+      background-color: #0e1117;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(20, 30, 45, 0.6) 0px, transparent 75%),
+        radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+      background-size: 100% 100%, 20px 20px;
     }
   </style>
 </head>
-<body class="text-slate-200 antialiased min-h-screen flex flex-col justify-between">
+<body class="text-stone-300 antialiased min-h-screen flex flex-col justify-between">
 
-  <!-- Header del Panel -->
-  <header class="border-b border-slate-800/80 bg-[#0d1424] px-6 py-4">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div>
-        <p class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Panel Administrativo</p>
-        <h1 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-          Sucursal Administrativa <span class="text-xs font-medium text-slate-400">(Nodo 2)</span>
-        </h1>
-      </div>
-      
+  <!-- Header Superior -->
+  <header class="border-b border-stone-800/80 bg-[#121620]/80 backdrop-blur-md px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <!-- Badge de Estado -->
-        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          En servicio
+        <div class="w-9 h-9 rounded-xl bg-stone-800 border border-stone-700/60 flex items-center justify-center text-stone-200">
+          <i data-lucide="building-2" class="w-5 h-5"></i>
         </div>
-
-        <!-- Botón Volver -->
-        <a href="/dashboard" class="px-4 py-2 bg-[#182234] hover:bg-[#202d44] border border-slate-700/60 rounded-lg text-xs font-semibold text-slate-200 transition-colors inline-flex items-center gap-2">
-          <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
-          Ver dashboard
-        </a>
+        <div>
+          <p class="text-[10px] font-bold tracking-wider text-stone-400 uppercase">Sistema Bancario Distribuido</p>
+          <h1 class="text-sm font-bold text-stone-100 tracking-tight">
+            Sucursal Administrativa <span class="text-xs font-normal text-stone-400">(Nodo 2)</span>
+          </h1>
+        </div>
       </div>
+
+      <a href="/dashboard" class="px-3.5 py-1.5 rounded-lg bg-stone-800/80 hover:bg-stone-700 border border-stone-700/60 text-stone-300 text-xs font-medium transition-all flex items-center gap-1.5">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        <span>Volver al Dashboard</span>
+      </a>
     </div>
   </header>
 
-  <!-- Contenido Principal -->
-  <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-1">
-    
-    <!-- Fila de Métricas Superiores -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <!-- Formulario de Alta de Cliente -->
+  <main class="flex-1 flex items-center justify-center p-4 sm:p-6">
+    <div class="w-full max-w-lg">
       
-      <!-- Card 1 -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-4">
-        <p class="text-xs font-medium text-slate-400">Tipo de Nodo</p>
-        <p class="text-xl font-bold text-white mt-1">Sucursal #02</p>
-        <p class="text-[11px] text-slate-500 mt-1">Habilitado para aperturas</p>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-4">
-        <p class="text-xs font-medium text-slate-400">Conexión Banco Central</p>
-        <p class="text-xl font-bold text-emerald-400 mt-1">Conectado</p>
-        <p class="text-[11px] text-slate-500 mt-1">API Key validada</p>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-4">
-        <p class="text-xs font-medium text-slate-400">Operación</p>
-        <p class="text-xl font-bold text-white mt-1">Alta de Cuentas</p>
-        <p class="text-[11px] text-slate-500 mt-1">Sincronización directa</p>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-4">
-        <p class="text-xs font-medium text-slate-400">Modo</p>
-        <p class="text-xl font-bold text-amber-400 mt-1">Producción / Render</p>
-        <p class="text-[11px] text-slate-500 mt-1">Base de datos en nube</p>
-      </div>
-
-    </div>
-
-    <!-- Layout Central de Formulario -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-      
-      <!-- Columna Izquierda: Formulario de Registro (8 cols) -->
-      <div class="lg:col-span-7 bg-[#131b2e] border border-slate-800 rounded-xl p-6 shadow-2xl">
-        <div class="mb-6 border-b border-slate-800 pb-4">
-          <h2 class="text-lg font-bold text-white">Apertura de Cuenta de Cliente</h2>
-          <p class="text-xs text-slate-400 mt-0.5">Ingresa los datos del nuevo cuentahabiente para enviarlos al Banco Central.</p>
+      <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-8 shadow-2xl shadow-black/50 relative overflow-hidden">
+        
+        <!-- Header del Formulario -->
+        <div class="flex items-center justify-between pb-6 mb-6 border-b border-stone-800/80">
+          <div>
+            <h2 class="text-xl font-bold text-stone-100 tracking-tight">Apertura de Cuenta</h2>
+            <p class="text-xs text-stone-400 mt-0.5">Registro oficial de cuentahabiente en la red Central</p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <i data-lucide="user-plus" class="w-5 h-5"></i>
+          </div>
         </div>
 
         <% if (typeof error !== 'undefined' && error) { %>
-          <!-- Alerta de Error Estilo Oscuro -->
-          <div class="mb-6 p-4 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-3">
-            <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
-            <div>
-              <p class="font-bold">Error en la operación</p>
-              <p class="mt-0.5 text-rose-300/80"><%= error %></p>
-            </div>
+          <!-- Alerta de Error -->
+          <div class="mb-6 p-4 rounded-xl bg-rose-950/40 border border-rose-800/50 text-rose-300 text-xs flex items-center gap-3">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+            <span><%= error %></span>
           </div>
         <% } %>
 
@@ -105,83 +73,62 @@
           
           <!-- Nombre del Titular -->
           <div>
-            <label for="titular" class="block text-xs font-semibold text-slate-300 mb-2">
+            <label for="titular" class="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-2">
               Nombre Completo del Titular
             </label>
-            <input 
-              type="text" 
-              id="titular" 
-              name="titular" 
-              required 
-              placeholder="ej. Juan Pérez" 
-              class="w-full px-3.5 py-2.5 bg-[#0b101a] border border-slate-700/80 rounded-lg text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium"
-            />
-          </div>
-
-          <!-- Saldo Inicial -->
-          <div>
-            <label for="saldo" class="block text-xs font-semibold text-slate-300 mb-2">
-              Saldo Inicial ($ MXN)
-            </label>
             <div class="relative">
-              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500 font-semibold text-sm">$</span>
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-500">
+                <i data-lucide="user" class="w-4 h-4"></i>
+              </div>
               <input 
-                type="number" 
-                id="saldo" 
-                name="saldo" 
-                step="0.01" 
-                min="0" 
+                type="text" 
+                id="titular" 
+                name="titular" 
                 required 
-                placeholder="1000.00" 
-                class="w-full pl-8 pr-3.5 py-2.5 bg-[#0b101a] border border-slate-700/80 rounded-lg text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium"
+                placeholder="Ej. Juan Pérez" 
+                class="w-full pl-10 pr-4 py-2.5 bg-[#0d1017] border border-stone-800 rounded-xl text-stone-100 placeholder-stone-600 text-sm focus:outline-none focus:border-stone-600 focus:ring-1 focus:ring-stone-600 transition-all font-medium"
               />
             </div>
           </div>
 
-          <!-- Nota informativa -->
-          <div class="p-3.5 rounded-lg bg-[#0b101a]/60 border border-slate-800 text-xs text-slate-400 flex items-start gap-2.5">
-            <i data-lucide="info" class="w-4 h-4 text-blue-400 shrink-0 mt-0.5"></i>
-            <p>El Banco Central generará automáticamente un número de cuenta único de 10 dígitos y registrará el saldo inicial como el primer depósito oficial.</p>
+          <!-- Saldo Inicial -->
+          <div>
+            <label for="saldo_inicial" class="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-2">
+              Saldo Inicial ($)
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-500">
+                <i data-lucide="dollar-sign" class="w-4 h-4"></i>
+              </div>
+              <input 
+                type="number" 
+                id="saldo_inicial" 
+                name="saldo_inicial" 
+                min="0" 
+                step="any" 
+                required 
+                placeholder="1000" 
+                class="w-full pl-10 pr-4 py-2.5 bg-[#0d1017] border border-stone-800 rounded-xl text-stone-100 placeholder-stone-600 text-sm focus:outline-none focus:border-stone-600 focus:ring-1 focus:ring-stone-600 transition-all font-medium"
+              />
+            </div>
           </div>
 
-          <!-- Botón de Acción -->
+          <!-- Nota Informativa -->
+          <div class="p-3.5 rounded-xl bg-stone-900/60 border border-stone-800/80 text-[11px] text-stone-400 flex items-start gap-2.5">
+            <i data-lucide="info" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+            <span>El número de cuenta de 10 dígitos se asignará automáticamente desde el Banco Central al procesar el alta.</span>
+          </div>
+
+          <!-- Botón Registrar -->
           <button 
             type="submit" 
             id="submitBtn"
-            class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-blue-600/20 cursor-pointer flex items-center justify-center gap-2"
+            class="w-full py-3 px-4 bg-emerald-800 hover:bg-emerald-700 active:bg-emerald-900 text-emerald-100 text-xs font-bold uppercase tracking-wider rounded-xl transition-all border border-emerald-600/30 shadow-lg shadow-emerald-950/50 cursor-pointer flex items-center justify-center gap-2 mt-2"
           >
-            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
             <span>Registrar Cuenta</span>
           </button>
         </form>
-      </div>
-
-      <!-- Columna Derecha: Información del Estado del Nodo (5 cols) -->
-      <div class="lg:col-span-5 space-y-6">
-        
-        <!-- Tarjeta de Información de Red -->
-        <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-6">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Estado de la Red</h3>
-          
-          <div class="space-y-3 text-xs">
-            <div class="flex justify-between py-2 border-b border-slate-800">
-              <span class="text-slate-400">Banco Central</span>
-              <span class="font-semibold text-white">Nodo 1 (Central)</span>
-            </div>
-            <div class="flex justify-between py-2 border-b border-slate-800">
-              <span class="text-slate-400">API Key activa</span>
-              <span class="font-mono text-emerald-400">atm_test_123456</span>
-            </div>
-            <div class="flex justify-between py-2 border-b border-slate-800">
-              <span class="text-slate-400">Protocolo</span>
-              <span class="font-semibold text-white">REST / JSON</span>
-            </div>
-            <div class="flex justify-between py-2">
-              <span class="text-slate-400">Base de datos local</span>
-              <span class="font-semibold text-emerald-400">Supabase Conectada</span>
-            </div>
-          </div>
-        </div>
 
       </div>
 
@@ -189,8 +136,8 @@
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-slate-800/60 bg-[#0d1424] py-4 text-center text-xs text-slate-500">
-    <p>Sistema Bancario Distribuido &bull; Nodo 2 Administrativo</p>
+  <footer class="border-t border-stone-800/60 bg-[#121620]/60 py-3 text-center text-xs text-stone-500">
+    <p>Sistema Bancario Distribuido &bull; Nodo 2 Sucursal</p>
   </footer>
 
   <script>
@@ -203,7 +150,7 @@
       submitBtn.disabled = true;
       submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
       submitBtn.innerHTML = `
-        <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg class="animate-spin h-4 w-4 text-emerald-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
