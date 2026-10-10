@@ -12,37 +12,46 @@
   <style>
     body { 
       font-family: 'Plus Jakarta Sans', sans-serif; 
-      background-color: #0b101a;
+      background-color: #0e1117;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(20, 30, 45, 0.6) 0px, transparent 75%),
+        radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+      background-size: 100% 100%, 20px 20px;
     }
   </style>
 </head>
-<body class="text-slate-200 antialiased min-h-screen flex flex-col justify-between">
+<body class="text-stone-300 antialiased min-h-screen flex flex-col justify-between">
 
-  <!-- Header del Panel -->
-  <header class="border-b border-slate-800/80 bg-[#0d1424] px-6 py-4">
+  <!-- Header Principal -->
+  <header class="border-b border-stone-800/80 bg-[#121620]/80 backdrop-blur-md px-6 py-4">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div>
-        <p class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Panel Administrativo</p>
-        <h1 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-          Sucursal Administrativa <span class="text-xs font-medium text-slate-400">(Nodo 2)</span>
-        </h1>
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-stone-800 border border-stone-700/60 flex items-center justify-center text-stone-200">
+          <i data-lucide="building-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <p class="text-[10px] font-bold tracking-wider text-stone-400 uppercase">Panel Administrativo</p>
+          <h1 class="text-sm font-bold text-stone-100 tracking-tight">
+            Sucursal Administrativa <span class="text-xs font-normal text-stone-400">(Nodo 2)</span>
+          </h1>
+        </div>
       </div>
       
       <div class="flex items-center gap-4">
-        <!-- Usuario activo -->
+        <!-- Info Usuario -->
         <div class="text-right hidden sm:block">
-          <p class="text-xs font-semibold text-slate-200"><%= typeof user !== 'undefined' ? (user.email || user) : 'ejecutivo1@sucursal.com' %></p>
+          <p class="text-xs font-semibold text-stone-200"><%= typeof user !== 'undefined' ? (user.email || user) : 'ejecutivo1@sucursal.com' %></p>
           <p class="text-[10px] text-emerald-400 font-medium">Ejecutivo de Cuenta</p>
         </div>
 
-        <!-- Badge de Estado -->
-        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+        <!-- Indicator de Estado -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/50 border border-emerald-800/40 text-emerald-400 text-xs font-medium">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          En servicio
+          En Servicio
         </div>
 
-        <!-- Cerrar Sesión -->
-        <a href="/logout" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 rounded-lg text-xs font-semibold text-rose-400 transition-colors inline-flex items-center gap-1.5">
+        <!-- Botón Logout -->
+        <a href="/logout" class="px-3.5 py-1.5 bg-stone-800/80 hover:bg-rose-950/40 hover:border-rose-800/50 hover:text-rose-300 border border-stone-700/60 rounded-lg text-xs font-medium text-stone-300 transition-all flex items-center gap-1.5">
           <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
           Salir
         </a>
@@ -53,108 +62,112 @@
   <!-- Contenido Principal -->
   <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-1">
     
-    <!-- Fila de Métricas y Estado de la Sucursal -->
+    <!-- Grid de Métricas de Estado -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       
-      <!-- Metric 1: Efectivo -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-5 relative overflow-hidden">
+      <!-- Card 1: Efectivo -->
+      <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-5 shadow-xl shadow-black/40">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-xs font-medium text-slate-400">Efectivo en Sucursal</p>
-            <p class="text-2xl font-bold text-white mt-1">$<%= typeof nodeInfo !== 'undefined' && nodeInfo.efectivo_disponible ? nodeInfo.efectivo_disponible : '10,000.00' %></p>
+            <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider">Efectivo en Caja</p>
+            <p class="text-2xl font-bold text-stone-100 mt-1.5">$<%= typeof nodeInfo !== 'undefined' && nodeInfo.efectivo_disponible ? nodeInfo.efectivo_disponible : '5,000.00' %></p>
           </div>
-          <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+          <div class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
             <i data-lucide="wallet" class="w-5 h-5"></i>
           </div>
         </div>
-        <p class="text-[11px] text-slate-500 mt-2">Sincronizado con Banco Central</p>
+        <p class="text-[11px] text-stone-500 mt-3">Sincronizado con Banco Central</p>
       </div>
 
-      <!-- Metric 2: Conexión -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-5">
+      <!-- Card 2: Conexión -->
+      <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-5 shadow-xl shadow-black/40">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-xs font-medium text-slate-400">Conexión con Central</p>
-            <p class="text-xl font-bold text-emerald-400 mt-1">Conectado</p>
+            <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider">Estado Central</p>
+            <p class="text-xl font-bold text-emerald-400 mt-1.5">Conectado</p>
           </div>
-          <div class="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+          <div class="w-9 h-9 rounded-xl bg-stone-800 border border-stone-700/60 flex items-center justify-center text-stone-300">
             <i data-lucide="server" class="w-5 h-5"></i>
           </div>
         </div>
-        <p class="text-[11px] text-slate-500 mt-2">API Key: <span class="font-mono text-slate-400">atm_test_123456</span></p>
+        <p class="text-[11px] text-stone-500 mt-3">Nodo 2 &bull; Sucursal Centro</p>
       </div>
 
-      <!-- Metric 3: Tipo de Operación -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-5">
+      <!-- Card 3: Operatividad -->
+      <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-5 shadow-xl shadow-black/40">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-xs font-medium text-slate-400">Tipo de Nodo</p>
-            <p class="text-xl font-bold text-white mt-1">Sucursal #02</p>
+            <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider">Tipo de Nodo</p>
+            <p class="text-xl font-bold text-stone-100 mt-1.5">Sucursal #02</p>
           </div>
-          <div class="w-9 h-9 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
-            <i data-lucide="building-2" class="w-5 h-5"></i>
+          <div class="w-9 h-9 rounded-xl bg-stone-800 border border-stone-700/60 flex items-center justify-center text-stone-300">
+            <i data-lucide="building" class="w-5 h-5"></i>
           </div>
         </div>
-        <p class="text-[11px] text-slate-500 mt-2">Apertura de Cuentas activa</p>
+        <p class="text-[11px] text-stone-500 mt-3">Alta de Cuentas Autorizada</p>
       </div>
 
-      <!-- Metric 4: Base de Datos -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-5">
+      <!-- Card 4: BD Local -->
+      <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-5 shadow-xl shadow-black/40">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-xs font-medium text-slate-400">Base de Datos Local</p>
-            <p class="text-xl font-bold text-amber-400 mt-1">Supabase OK</p>
+            <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider">Persistencia Local</p>
+            <p class="text-xl font-bold text-stone-200 mt-1.5">Supabase</p>
           </div>
-          <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
             <i data-lucide="database" class="w-5 h-5"></i>
           </div>
         </div>
-        <p class="text-[11px] text-slate-500 mt-2">Persistencia de operaciones</p>
+        <p class="text-[11px] text-stone-500 mt-3">Base de datos operativa</p>
       </div>
 
     </div>
 
-    <!-- Módulos Principales de Acción -->
-    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Operaciones de Sucursal</h2>
+    <!-- Módulos de Operación -->
+    <h2 class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-4">Operaciones de Sucursal</h2>
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
       
-      <!-- Opción 1: Alta de Nuevo Cliente -->
-      <a href="/new-client" class="group bg-[#131b2e] hover:bg-[#182234] border border-slate-800 hover:border-blue-500/50 rounded-xl p-6 transition-all duration-200 block shadow-lg">
-        <div class="w-12 h-12 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-          <i data-lucide="user-plus" class="w-6 h-6"></i>
+      <!-- Acción 1: Apertura de Cuenta -->
+      <a href="/new-client" class="group bg-[#151922] hover:bg-[#1a202c] border border-stone-800/90 hover:border-stone-700 rounded-2xl p-6 transition-all duration-200 block shadow-xl shadow-black/40">
+        <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+          <i data-lucide="user-plus" class="w-5 h-5"></i>
         </div>
-        <h3 class="text-base font-bold text-white group-hover:text-blue-400 transition-colors">Apertura de Cuenta</h3>
-        <p class="text-xs text-slate-400 mt-1 leading-relaxed">Registra un nuevo cliente con asignación de número de cuenta y saldo inicial oficial.</p>
-        <div class="mt-4 inline-flex items-center gap-1 text-xs font-bold text-blue-400">
-          <span>Ir al formulario</span>
+        <h3 class="text-base font-bold text-stone-100 group-hover:text-emerald-400 transition-colors">Apertura de Cuenta</h3>
+        <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">Registra un nuevo cuentahabiente en la red del Banco Central con saldo inicial.</p>
+        <div class="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+          <span>Abrir formulario</span>
           <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
         </div>
       </a>
 
-      <!-- Opción 2: Consultar Cuentas -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-6 shadow-lg">
-        <div class="w-12 h-12 rounded-xl bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4">
-          <i data-lucide="search" class="w-6 h-6"></i>
+      <!-- Acción 2: Consultar Cuentas -->
+      <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-6 shadow-xl shadow-black/40 flex flex-col justify-between">
+        <div>
+          <div class="w-11 h-11 rounded-xl bg-stone-800 border border-stone-700/60 text-stone-300 flex items-center justify-center mb-4">
+            <i data-lucide="search" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-stone-100">Consultar Cuenta</h3>
+          <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">Verifica el balance y titularidad de un cliente en la red bancaria.</p>
         </div>
-        <h3 class="text-base font-bold text-white">Consultar Cuentas</h3>
-        <p class="text-xs text-slate-400 mt-1 leading-relaxed">Verifica el saldo y estado actual de cualquier cuentahabiente en el Banco Central.</p>
         <div class="mt-4 flex gap-2">
-          <input type="text" placeholder="Número de cuenta..." class="w-full px-3 py-1.5 bg-[#0b101a] border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
-          <button class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold">Buscar</button>
+          <input type="text" placeholder="Número de cuenta..." class="w-full px-3 py-2 bg-[#0d1017] border border-stone-800 rounded-xl text-xs text-stone-100 placeholder-stone-600 focus:outline-none focus:border-stone-600">
+          <button class="px-3.5 py-2 bg-stone-800 hover:bg-stone-700 border border-stone-700/60 text-stone-200 rounded-xl text-xs font-semibold shrink-0">Buscar</button>
         </div>
       </div>
 
-      <!-- Opción 3: Estado de la Red -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-xl p-6 shadow-lg">
-        <div class="w-12 h-12 rounded-xl bg-purple-600/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mb-4">
-          <i data-lucide="activity" class="w-6 h-6"></i>
+      <!-- Acción 3: Bitácora Local -->
+      <div class="bg-[#151922] border border-stone-800/90 rounded-2xl p-6 shadow-xl shadow-black/40 flex flex-col justify-between">
+        <div>
+          <div class="w-11 h-11 rounded-xl bg-stone-800 border border-stone-700/60 text-stone-300 flex items-center justify-center mb-4">
+            <i data-lucide="activity" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-stone-100">Auditoría Local</h3>
+          <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">Historial inmutable de movimientos registrados localmente en este nodo.</p>
         </div>
-        <h3 class="text-base font-bold text-white">Auditoría Local</h3>
-        <p class="text-xs text-slate-400 mt-1 leading-relaxed">Bitácora inmutable de transacciones procesadas por este nodo administrativo.</p>
-        <div class="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          Sincronizado con Supabase
+        <div class="mt-4 inline-flex items-center gap-2 text-xs font-medium text-stone-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          Registros sincronizados
         </div>
       </div>
 
@@ -163,7 +176,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-slate-800/60 bg-[#0d1424] py-4 text-center text-xs text-slate-500">
+  <footer class="border-t border-stone-800/60 bg-[#121620]/60 py-3 text-center text-xs text-stone-500">
     <p>Sistema Bancario Distribuido &bull; Nodo 2 Sucursal Administrativa</p>
   </footer>
 
