@@ -91,7 +91,7 @@
             </div>
           </div>
 
-          <!-- Saldo Inicial -->
+          <!-- Saldo Inicial (Sin bloqueo por type="number") -->
           <div>
             <label for="saldo_inicial" class="block text-xs font-semibold uppercase tracking-wider text-stone-400 mb-2">
               Saldo Inicial ($)
@@ -101,11 +101,10 @@
                 <i data-lucide="dollar-sign" class="w-4 h-4"></i>
               </div>
               <input 
-                type="number" 
+                type="text" 
+                inputmode="decimal"
                 id="saldo_inicial" 
                 name="saldo_inicial" 
-                min="0" 
-                step="any" 
                 required 
                 placeholder="1000" 
                 class="w-full pl-10 pr-4 py-2.5 bg-[#0d1017] border border-stone-800 rounded-xl text-stone-100 placeholder-stone-600 text-sm focus:outline-none focus:border-stone-600 focus:ring-1 focus:ring-stone-600 transition-all font-medium"
@@ -145,8 +144,14 @@
 
     const form = document.getElementById('accountForm');
     const submitBtn = document.getElementById('submitBtn');
+    const saldoInput = document.getElementById('saldo_inicial');
 
-    form.addEventListener('submit', () => {
+    form.addEventListener('submit', (e) => {
+      // Limpia símbolos ($ o comas) antes de enviar para garantizar que viaje un número limpio a Node.js
+      if (saldoInput.value) {
+        saldoInput.value = saldoInput.value.replace(/[^0-9.]/g, '');
+      }
+
       submitBtn.disabled = true;
       submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
       submitBtn.innerHTML = `
