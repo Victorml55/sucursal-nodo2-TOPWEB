@@ -21,10 +21,11 @@ Toda la operación se realiza en comunicación sincrónica con el **Nodo 1 (Banc
 
 ## Enlaces de despliegue en producción
 
-| Componente | Entorno de hosting | URL pública | Estado |
+| Nodo | Hosting | URL pública | Repositorio |
 |---|---|---|---|
-| Nodo 1: Banco Central API | Coolify / Render | https://banco-central-api.onrender.com | Activo |
-| Nodo 2: Sucursal Administrativa | Render / Vercel | https://sucursal-nodo2-nyl2.onrender.com | Activo |
+| Nodo 1: Banco Central (API) | Render | https://banco-central-panel.onrender.com | [ExamenTWBancoCentral](https://github.com/ReynaldoEGL/ExamenTWBancoCentral) |
+| Nodo 2: Sucursal Administrativa | Render | https://sucursal-nodo2-nyl2.onrender.com | [sucursal-nodo2-TOPWEB](https://github.com/Victorml55/sucursal-nodo2-TOPWEB) |
+| Nodo 3: Cajero | Vercel | https://cajero-topweb.vercel.app | [Cajero-TOPWEB](https://github.com/ricardo-rodriguezdesk/Cajero-TOPWEB) |
 
 ---
 
@@ -47,6 +48,11 @@ graph TD
         CentralDB[("Base de Datos Central - PostgreSQL / Supabase")]
     end
 
+    subgraph Nodo3 ["Nodo 3: Cajero (Vercel)"]
+        CajeroUI["Interfaz del Cajero"]
+    end
+
+    CajeroUI -->|Peticiones REST| CentralAPI
     UI -->|HTTPS / Requests| Router
     Router -->|Invocación interna| CentralService
     CentralService -->|Peticiones REST con API Key| CentralAPI
@@ -106,12 +112,12 @@ sucursal-nodo2/
 
 ## Variables de entorno
 
-Para ejecutar el proyecto localmente o desplegarlo en Render, Vercel o Coolify, configura las siguientes variables en un archivo `.env`:
+Para ejecutar el proyecto localmente o desplegarlo en Render o Vercel, configura las siguientes variables en un archivo `.env`:
 
 ```env
 PORT=3000
 SESSION_SECRET=super_secreto_bancario_nodo2
-CENTRAL_API_URL=https://banco-central-api.onrender.com/api
+CENTRAL_API_URL=https://banco-central-panel.onrender.com/api
 CENTRAL_API_KEY=tu_clave_api_central_aqui
 ```
 
@@ -124,8 +130,8 @@ CENTRAL_API_KEY=tu_clave_api_central_aqui
 1. Clonar el repositorio:
 
    ```bash
-   git clone https://github.com/tu-usuario/sucursal-nodo2.git
-   cd sucursal-nodo2
+   git clone https://github.com/Victorml55/sucursal-nodo2-TOPWEB.git
+   cd sucursal-nodo2-TOPWEB
    ```
 
 2. Instalar dependencias:
