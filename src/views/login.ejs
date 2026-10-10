@@ -12,72 +12,69 @@
   <style>
     body { 
       font-family: 'Plus Jakarta Sans', sans-serif; 
-      background-color: #0b101a;
+      background-color: #f4f1ea;
+      background-image: radial-gradient(#e2dcd0 0.8px, transparent 0.8px);
+      background-size: 16px 16px;
     }
   </style>
 </head>
-<body class="text-slate-200 antialiased min-h-screen flex flex-col justify-between">
+<body class="text-stone-800 antialiased min-h-screen flex flex-col justify-between">
 
   <!-- Header Superior Minimalista -->
-  <header class="border-b border-slate-800/80 bg-[#0d1424] px-6 py-4">
+  <header class="border-b border-stone-200/80 bg-stone-100/60 backdrop-blur-md px-6 py-4">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+        <div class="w-9 h-9 rounded-xl bg-stone-900 flex items-center justify-center text-stone-50 shadow-sm">
           <i data-lucide="building-2" class="w-5 h-5"></i>
         </div>
         <div>
-          <p class="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Sistema Bancario Distribuido</p>
-          <h1 class="text-sm font-bold text-white tracking-tight">
-            Sucursal Administrativa <span class="text-xs font-normal text-slate-400">(Nodo 2)</span>
+          <p class="text-[10px] font-bold tracking-wider text-stone-500 uppercase">Sistema Bancario Distribuido</p>
+          <h1 class="text-sm font-bold text-stone-900 tracking-tight">
+            Sucursal Administrativa <span class="text-xs font-normal text-stone-500">(Nodo 2)</span>
           </h1>
         </div>
       </div>
       
-      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-600/20 text-emerald-700 text-xs font-semibold">
+        <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
         Terminal Segura
       </div>
     </div>
   </header>
 
-  <!-- Contenido Principal: Card de Login -->
+  <!-- Contenido Principal: Card de Login Simplificada -->
   <main class="flex-1 flex items-center justify-center p-4 sm:p-6">
     <div class="w-full max-w-md">
       
-      <!-- Card de Acceso -->
-      <div class="bg-[#131b2e] border border-slate-800 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
-        <!-- Accent Glow superior -->
-        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-emerald-500"></div>
-
-        <!-- Encabezado del Formulario -->
+      <!-- Card Limpia y Limpia de Bordes Finos -->
+      <div class="bg-white/95 backdrop-blur-md border border-stone-200/90 rounded-2xl p-8 shadow-xl shadow-stone-900/5">
+        
+        <!-- Header de la Card -->
         <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-600/10 border border-blue-500/20 text-blue-400 mb-4 shadow-inner">
-            <i data-lucide="shield-check" class="w-7 h-7"></i>
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-stone-100 border border-stone-200 text-stone-800 mb-3">
+            <i data-lucide="shield-check" class="w-6 h-6"></i>
           </div>
-          <h2 class="text-2xl font-bold text-white tracking-tight">Acceso Ejecutivo</h2>
-          <p class="text-xs text-slate-400 mt-1.5">Ingresa tus credenciales autorizadas para operar la sucursal.</p>
+          <h2 class="text-xl font-bold text-stone-900 tracking-tight">Acceso Ejecutivo</h2>
+          <p class="text-xs text-stone-500 mt-1">Ingresa tus credenciales para operar la sucursal</p>
         </div>
 
         <% if (typeof error !== 'undefined' && error) { %>
           <!-- Alerta de Error -->
-          <div class="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-3">
-            <i data-lucide="alert-circle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
-            <div class="flex-1">
-              <p class="font-semibold text-rose-200">Error de Autenticación</p>
-              <p class="mt-0.5 opacity-90"><%= error %></p>
-            </div>
+          <div class="mb-6 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2.5">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-rose-500 shrink-0"></i>
+            <span><%= error %></span>
           </div>
         <% } %>
 
-        <form action="/login" method="POST" id="loginForm" class="space-y-5">
+        <form action="/login" method="POST" id="loginForm" class="space-y-4">
           
-          <!-- Campo Correo Electrónico -->
+          <!-- Correo Electrónico -->
           <div>
-            <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1.5">
               Correo Electrónico
             </label>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400">
                 <i data-lucide="mail" class="w-4 h-4"></i>
               </div>
               <input 
@@ -86,18 +83,18 @@
                 name="email" 
                 required 
                 placeholder="ejecutivo1@sucursal.com" 
-                class="w-full pl-10 pr-4 py-2.5 bg-[#0b101a] border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium"
+                class="w-full pl-10 pr-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-stone-900 placeholder-stone-400 text-sm focus:outline-none focus:border-stone-800 focus:bg-white transition-all font-medium"
               />
             </div>
           </div>
 
-          <!-- Campo Contraseña -->
+          <!-- Contraseña -->
           <div>
-            <label for="password" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <label for="password" class="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1.5">
               Contraseña
             </label>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400">
                 <i data-lucide="lock" class="w-4 h-4"></i>
               </div>
               <input 
@@ -106,24 +103,24 @@
                 name="password" 
                 required 
                 placeholder="••••••••" 
-                class="w-full pl-10 pr-4 py-2.5 bg-[#0b101a] border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium"
+                class="w-full pl-10 pr-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-stone-900 placeholder-stone-400 text-sm focus:outline-none focus:border-stone-800 focus:bg-white transition-all font-medium"
               />
             </div>
           </div>
 
-          <!-- Botón Ingresar -->
+          <!-- Botón de Envío -->
           <button 
             type="submit" 
             id="submitBtn"
-            class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-blue-600/25 cursor-pointer flex items-center justify-center gap-2 mt-2"
+            class="w-full py-2.5 px-4 bg-stone-900 hover:bg-stone-800 active:bg-stone-950 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-stone-900/10 cursor-pointer flex items-center justify-center gap-2 mt-2"
           >
             <i data-lucide="log-in" class="w-4 h-4"></i>
             <span>Ingresar al Panel</span>
           </button>
         </form>
 
-        <div class="mt-6 pt-5 border-t border-slate-800/80 text-center text-[11px] text-slate-500">
-          <span>Sesión protegida por encriptación local y API Key</span>
+        <div class="mt-6 pt-4 border-t border-stone-100 text-center text-[11px] text-stone-400">
+          Autenticación cifrada &bull; Nodo 2
         </div>
 
       </div>
@@ -132,8 +129,8 @@
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-slate-800/60 bg-[#0d1424] py-4 text-center text-xs text-slate-500">
-    <p>Sistema Bancario Distribuido &bull; Terminal de Autenticación Nodo 2</p>
+  <footer class="border-t border-stone-200/60 bg-stone-100/40 py-3 text-center text-xs text-stone-500">
+    <p>Sistema Bancario Distribuido &bull; Nodo 2 Sucursal</p>
   </footer>
 
   <script>
